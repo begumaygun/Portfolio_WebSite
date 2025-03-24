@@ -50,9 +50,20 @@ const Island = ({isRotating,setRotating,...props}) => {
       handlePointerUp(e);
     }
   }
+  
 
   useEffect(()=>{
-  },[gl,handlePointerMove,handlePointerDown,handlePointerUp]
+    document.addEventListener('pointermove',handlePointerMove);
+    document.addEventListener('pointerdown',handlePointerDown);
+    document.addEventListener('pointerup',handlePointerUp);
+
+    return ()=>{
+      document.removeEventListener('pointermove',handlePointerMove);
+      document.removeEventListener('pointerdown',handlePointerDown);
+      document.removeEventListener('pointerup',handlePointerUp);
+    }
+  },
+  [gl,handlePointerMove,handlePointerDown,handlePointerUp]
   )
   return (
     <a.group ref={islandRef} {...props} >
