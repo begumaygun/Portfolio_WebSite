@@ -8,6 +8,7 @@ import Island from '../models/Island';
 import Sky from '../models/Sky';
 import Bird from '../models/bird';
 import Plane from '../models/plane';//its so weird still that its not capital as well!!
+
 {/*<div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
       POPUP
       </div>*/}
@@ -15,6 +16,7 @@ import Plane from '../models/plane';//its so weird still that its not capital as
 const Home = () => {
 
   const [isRotating,setIsRotating]=useState(false)
+  const [currentStage,setCurrentStage]=useState(1)
 
    const adjustIslandForScreenSize=()=>{
     let screenScale=null;
@@ -64,13 +66,14 @@ const Home = () => {
       
       
       <Bird/>
-      <Sky/>
+      <Sky isRotating={isRotating}/>
       <Island
       position={islandPosition}
       scale={islandScale}
       rotation={islandRotation}
       isRotating={isRotating}
       setIsRotating={setIsRotating}
+      setCurrentStage={setCurrentStage}
       />
           <Plane
           planePosition={planePosition}
