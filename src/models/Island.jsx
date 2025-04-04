@@ -6,6 +6,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 
 const Island = ({isRotating,setRotating,setIsRotating,setCurrentStage,...props}) => {
   const islandRef = useRef();
+  const currentStageRef = useRef(0);
 
   const {gl,viewport}=useThree();
   const { nodes, materials } = useGLTF(islandScene);
@@ -65,6 +66,11 @@ const Island = ({isRotating,setRotating,setIsRotating,setCurrentStage,...props})
     }
   }
 
+  const normalizeAngle=(angle) => {
+    const twoPi = 2 * Math.PI;
+    return ((angle % twoPi) + twoPi) % twoPi;
+  };
+
   useFrame(()=>{
     if(!isRotating){
       rotationSpeed.current *=dampingFactor;
@@ -73,12 +79,30 @@ const Island = ({isRotating,setRotating,setIsRotating,setCurrentStage,...props})
         rotationSpeed.current=0;
       }
       islandRef.current.rotation.y +=rotationSpeed.current;}
-      else
-      {
-        const rotation = islandRef.current.rotation.y ;
+      
+      
+      const angle= normalizeAngle(islandRef.current.rotation.y);
+      let newStage=1;
+      const pi=Math.PI;
+
+
+      if (angle >= 0 && angle < pi / 2) {//0 degrees
+        newStage=3;
+      } else if (angle >= pi / 2 && angle < pi) { //90 degrees
+        newStage=4;
+      } else if (angle >= pi && angle < 3 * pi / 2) {//180 degrees
+        newStage=1;
+      } else {//270 degrees
+        newStage=2;
       }
-    }
-  )
+      if (newStage !== currentStageRef.current) {
+        currentStageRef.current = newStage;
+        setCurrentStage(newStage);
+      }
+    });
+      
+    
+  
 
   
 
